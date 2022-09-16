@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 
 import { PrismaClient } from '@prisma/client';
 import { convertHourStringToMinutes } from './utils/convert-in';
@@ -61,13 +62,15 @@ app.post('/games/:id/ads', async (request, response) => {
     const gameId = request.params.id;
     const body: any = request.body;
 
+    var weekDays = body.weekDays.join(',');
+
     const ad = await prisma.ad.create({
         data: {
             gameId: gameId,
             name: body.name,
             yearsPlaying: body.yearsPlaying,
             discord: body.discord,
-            weekDays: body.weekDays.join(','),
+            weekDays: weekDays,
             hourStart: convertHourStringToMinutes(body.hourStart),
             hourEnd: convertHourStringToMinutes(body.hourEnd),
             useVoiceChannel: body.useVoiceChannel,
